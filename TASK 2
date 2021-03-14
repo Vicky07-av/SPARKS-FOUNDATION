@@ -1,0 +1,70 @@
+#     THE SPARK FOUNDATION:predict the optimum number of clusters
+#                  and represent it visually using unsupervised ML in R
+# TASK-2
+#NAME: VIGNESH.A
+
+
+
+#importing required libraries
+library(tidyverse)
+library(cluster)
+library(reshape2)
+library(ggplot2)
+
+#read the dataset
+data<-read.csv("Iris.csv")
+View(data)
+
+#exploring the dataset
+head(data)
+glimpse(data)
+
+#Scatter plot
+#1)Sepal length and sepal width
+scatter <- ggplot(data=iris, aes(x = Sepal.Length, y = Sepal.Width)) 
+scatter + geom_point(aes(color=Species, shape=Species)) +
+  xlab("Sepal Length") +  ylab("Sepal Width") +
+  ggtitle("Sepal Length-Width")
+
+#2)petal length and petal width
+scatter1 <- ggplot(data=iris, aes(x = Petal.Length, y = Petal.Width)) 
+scatter1 + geom_point(aes(color=Species, shape=Species)) +
+  xlab("Petal Length") +  ylab("Petal Width") +
+  ggtitle("Petal Length-Width")
+
+#Box plot
+#1)Sepal length with species
+box <- ggplot(data=iris, aes(x=Species, y=Sepal.Length))
+box + geom_boxplot(aes(fill=Species)) + 
+  ylab("Sepal Length") + ggtitle("Iris Boxplot") +
+  stat_summary(fun=mean, geom="point") 
+
+#2)sepal width with species
+box1 <- ggplot(data=iris, aes(x=Species, y=Sepal.Width))
+box1 + geom_boxplot(aes(fill=Species)) + 
+  ylab("Sepal Width") + ggtitle("Iris Boxplot") +
+  stat_summary(fun=mean, geom="point") 
+
+
+#3)petal length with species
+box2<- ggplot(data=iris, aes(x=Species, y=Petal.Length))
+box2 + geom_boxplot(aes(fill=Species)) + 
+  ylab("Petal Length") + ggtitle("Iris Boxplot") +
+  stat_summary(fun=mean, geom="point") 
+
+#4)petal width with species
+box3<- ggplot(data=iris, aes(x=Species, y=Petal.Width))
+box3 + geom_boxplot(aes(fill=Species)) + 
+  ylab("Petal Width") + ggtitle("Iris Boxplot") +
+  stat_summary(fun=mean, geom="point") 
+
+#K-means clustering
+set.seed(20)
+irisCluster <- kmeans(iris[, 3:4], 3, nstart = 20)
+irisCluster
+
+#plotting the clusters
+irisCluster$cluster <- as.factor(irisCluster$cluster)
+ggplot(iris, aes(Petal.Length, Petal.Width, color = irisCluster$cluster)) + geom_point()
+
+
